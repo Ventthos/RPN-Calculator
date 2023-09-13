@@ -11,13 +11,12 @@ namespace RPN_Calculator
         static void Main(string[] args)
         {
             RPN rpnCalc = new RPN();
-            List<string> lista = new List<string>() { "6", "3", "2", "+", "5", "4", "-", "*", "10", "5", "-", "/", "+" };
 
-            Console.WriteLine(rpnCalc.Evaluador(lista));
-            string expresion = "6+(3+2)*(5-4)/(10-5)";
+            string expresion = "(3-8)+(5-(-2)))";
             List<string> expresList = rpnCalc.Convertidor(expresion);
             string final = String.Join(" ", expresList);
             Console.WriteLine(final);
+            Console.WriteLine($"Resultado: {rpnCalc.Evaluador(expresList)}");
         }
     }
 }

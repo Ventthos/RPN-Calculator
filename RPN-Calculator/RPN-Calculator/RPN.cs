@@ -106,36 +106,59 @@ namespace RPN_Calculator
             {
                 if (Char.IsDigit(expresion[i]))
                 {
-                    elements.Add(expresion[i].ToString());
-                }
-                else if (expresion[i] == ')')
-                {
-                    while (!stack.Empty)
+                    if((i + 1 != expresion.Length-1) && (Char.IsDigit(expresion[i+1]) || expresion[i+1] == '.'))
                     {
-                        if (stack.Peek() == '(')
+                        if(number.Contains('.') && expresion[i] == '.')
                         {
-                            stack.Pop();
-                            break;
+                            throw new ArgumentException("Sintax Error");
                         }
-                        elements.Add(stack.Pop().ToString());
+                        number += expresion[i];
+                        Console.WriteLine(number);
                     }
+                    else
+                    {
+                        if (number != "")
+                        {
+                            number += expresion[i];
+                            elements.Add(number);
+                            number = "";
+                        }
+                        else
+                        {
+                            elements.Add(expresion[i].ToString());
+                        }
+                    }
+                   
                 }
+                else if(expresion[i] == ' '){}
                 else
                 {
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
-                    while (true)
+                    if (expresion[i] == ')')
                     {
-                        if (stack.Empty || OpPriority(stack.Peek()) < OpPriority(expresion[i]) || stack.Peek() == '(')
+                        while (!stack.Empty)
                         {
-                            stack.Push(expresion[i]);
-                            break;
+                            if (stack.Peek() == '(')
+                            {
+                                stack.Pop();
+                                break;
+                            }
+                            elements.Add(stack.Pop().ToString());
                         }
-                        elements.Add(stack.Pop().ToString());
+                    }
+                    else
+                    {
+                        while (true)
+                        {
+                            if (stack.Empty || OpPriority(stack.Peek()) < OpPriority(expresion[i]) || stack.Peek() == '(')
+                            {
+                                stack.Push(expresion[i]);
+                                break;
+                            }
+                            elements.Add(stack.Pop().ToString());
+                        }
                     }
                 }
+                
             
             }
             Console.WriteLine(stack.GetDataText());
