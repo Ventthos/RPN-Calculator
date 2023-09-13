@@ -22,12 +22,12 @@ namespace RPN_Calculator
                 case '^':
                     return 3;
                 case '(':
-                    return 4;
+                    return 0;
                 default:
                     throw new ArgumentException("Unexpected operator");
             }
         }
-        public void Convertidor(string expresion)
+        public List<string> Convertidor(string expresion)
         {
             ArrayStack<char> list = new ArrayStack<char>();
             List<string> elements = new List<string>();
@@ -40,30 +40,46 @@ namespace RPN_Calculator
                         if (expresion[i + 1] == '.' && number.Contains("."))
                             throw new ArgumentException("Sintaxis error");
                         number += expresion[i];
+                    Console.WriteLine("Encontre un numero");
                 }
                 else
                 {
+                    Console.WriteLine("Encontre un signo");
                     if(number != "")
                     {
                         elements.Add(number);
+                        number = "";
                     }
                     if (expresion[i] == ')')
                     {
-                        while(list.Peek() != '(')
+                        while(!list.Empty && list.Peek() != '(')
                         {
                             elements.Add(list.Pop().ToString());
                         }
+                        list.Pop();
 
                     }
                     else
                     {
-                        while (OpPriority(expresion[i]) >= OpPriority(list.Peek()))
+                        if(expresion[i] != '(')
                         {
-                            elements.Add(list.Pop().ToString());
+                            while (!list.Empty && OpPriority(expresion[i]) >= OpPriority(list.Peek()))
+                            {
+
+                                elements.Add(list.Pop().ToString());
+                            }
                         }
+                        
+   
+                        list.Push(expresion[i]);
                     }
                 }
             }
+            for (int i = 0; i < list.Size; i++)
+            {
+                elements.Add(list.Pop().ToString());
+            }
+            return elements;
 
         }
 
