@@ -8,6 +8,76 @@ namespace RPN_Calculator
 {
     internal class RPN
     {
+        public bool Check(string expresion)
+        {
+            ArrayStack<char> stack = new ArrayStack<char>();
+            for (int i = 0; i < expresion.Length; i++)
+            {
+                switch (expresion[i])
+                {
+                    case '(':
+                        stack.Push('(');
+                        break;
+
+                    case '{':
+                        stack.Push('{');
+                        break;
+
+                    case '[':
+                        stack.Push('[');
+                        break; 
+                }
+                
+            }
+            for (int i = 0; i < expresion.Length; i++)
+            {
+                switch (expresion[i])
+                {
+                    case ')':
+                        stack.Pop();
+                        break;
+
+                    case '}':
+                        stack.Pop();
+                        break;
+
+                    case ']':
+                        stack.Pop();
+                        break;
+                }
+            }
+            bool isRight = false;
+            for (int i = 0; i < expresion.Length; i++)
+            {
+                bool bandera = false;
+                switch (expresion[i])
+                {
+                    case '+':
+                        bandera = true;
+                        break;
+                    case '-':
+                        bandera = true;
+                        break;
+                    case '*':
+                        bandera = true;
+                        break;
+                    case '/':
+                        bandera = true;
+                        break;
+                    case '^':
+                        bandera = true;
+                        break;
+
+                }
+            }
+            if (stack.Empty)
+            {
+                return true;
+            } else
+            {
+                return false;
+            }
+        }
 
         private int OpPriority(char op)
         {
@@ -22,62 +92,53 @@ namespace RPN_Calculator
                 case '^':
                     return 3;
                 case '(':
-                    return 0;
+                    return 4;
                 default:
                     throw new ArgumentException("Unexpected operator");
             }
         }
         public List<string> Convertidor(string expresion)
         {
-            ArrayStack<char> list = new ArrayStack<char>();
+            ArrayStack<char> stack = new ArrayStack<char>();
             List<string> elements = new List<string>();
             string number = "";
             for (int i = 0; i < expresion.Length; i++)
             {
-                if (char.IsNumber(expresion[i]) || expresion[i] == '.')
+                if (Char.IsDigit(expresion[i]))
                 {
-                    if (char.IsNumber(expresion[i + 1]) || expresion[i + 1] == '.')
-                        if (expresion[i + 1] == '.' && number.Contains("."))
-                            throw new ArgumentException("Sintaxis error");
-                        number += expresion[i];
-                    Console.WriteLine("Encontre un numero");
+                    elements.Add(expresion[i].ToString());
+                }
+                else if (expresion[i] == ')')
+                {
+                    while (!stack.Empty)
+                    {
+                        if (stack.Peek() == '(')
+                        {
+                            stack.Pop();
+                            break;
+                        }
+                        elements.Add(stack.Pop().ToString());
+                    }
                 }
                 else
                 {
-                    Console.WriteLine("Encontre un signo");
-                    if(number != "")
-                    {
-                        elements.Add(number);
-                        number = "";
-                    }
-                    if (expresion[i] == ')')
-                    {
-                        while(!list.Empty && list.Peek() != '(')
-                        {
-                            elements.Add(list.Pop().ToString());
-                        }
-                        list.Pop();
 
-                    }
-                    else
+                    while (true)
                     {
-                        if(expresion[i] != '(')
+                        if (stack.Empty || OpPriority(stack.Peek()) < OpPriority(expresion[i]) || stack.Peek() == '(')
                         {
-                            while (!list.Empty && OpPriority(expresion[i]) >= OpPriority(list.Peek()))
-                            {
-
-                                elements.Add(list.Pop().ToString());
-                            }
+                            stack.Push(expresion[i]);
+                            break;
                         }
-                        
-   
-                        list.Push(expresion[i]);
+                        elements.Add(stack.Pop().ToString());
                     }
                 }
+            
             }
-            for (int i = 0; i < list.Size; i++)
+            Console.WriteLine(stack.GetDataText());
+            for (int i = 0; i <= stack.Size; i++)
             {
-                elements.Add(list.Pop().ToString());
+                elements.Add(stack.Pop().ToString());
             }
             return elements;
 
