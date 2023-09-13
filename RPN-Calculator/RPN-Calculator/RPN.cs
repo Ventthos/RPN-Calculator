@@ -8,8 +8,65 @@ namespace RPN_Calculator
 {
     internal class RPN
     {
-       
-        
+
+        private int OpPriority(char op)
+        {
+            switch (op)
+            {
+                case '+':
+                case '-':
+                    return 1;
+                case '*':
+                case '/':
+                    return 2;
+                case '^':
+                    return 3;
+                case '(':
+                    return 4;
+                default:
+                    throw new ArgumentException("Unexpected operator");
+            }
+        }
+        public void Convertidor(string expresion)
+        {
+            ArrayStack<char> list = new ArrayStack<char>();
+            List<string> elements = new List<string>();
+            string number = "";
+            for (int i = 0; i < expresion.Length; i++)
+            {
+                if (char.IsNumber(expresion[i]) || expresion[i] == '.')
+                {
+                    if (char.IsNumber(expresion[i + 1]) || expresion[i + 1] == '.')
+                        if (expresion[i + 1] == '.' && number.Contains("."))
+                            throw new ArgumentException("Sintaxis error");
+                        number += expresion[i];
+                }
+                else
+                {
+                    if(number != "")
+                    {
+                        elements.Add(number);
+                    }
+                    if (expresion[i] == ')')
+                    {
+                        while(list.Peek() != '(')
+                        {
+                            elements.Add(list.Pop().ToString());
+                        }
+
+                    }
+                    else
+                    {
+                        while (OpPriority(expresion[i]) >= OpPriority(list.Peek()))
+                        {
+                            elements.Add(list.Pop().ToString());
+                        }
+                    }
+                }
+            }
+
+        }
+
         public double Evaluador(List<string> elements)
         {
             ArrayStack<double> actionQueue = new ArrayStack<double>();
@@ -55,7 +112,7 @@ namespace RPN_Calculator
                             
                     }
                 }
-                throw new ArgumentException("Unexpected operator");
+                
             }
             
             if(actionQueue.Size > 1)
@@ -65,6 +122,6 @@ namespace RPN_Calculator
             return actionQueue.Pop();
         }
 
-        public void 
+        
     }
 }
