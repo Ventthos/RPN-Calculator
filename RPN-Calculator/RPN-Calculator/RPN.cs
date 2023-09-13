@@ -122,7 +122,10 @@ namespace RPN_Calculator
                 }
                 else
                 {
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
                     while (true)
                     {
                         if (stack.Empty || OpPriority(stack.Peek()) < OpPriority(expresion[i]) || stack.Peek() == '(')
