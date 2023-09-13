@@ -6,3 +6,11 @@ C:\Users\Dell\Documents\GitHub\RPN-Calculator\RPN-Calculator\RPN-Calculator\obj\
 C:\Users\Dell\Documents\GitHub\RPN-Calculator\RPN-Calculator\RPN-Calculator\obj\Debug\RPN-Calculator.csproj.CoreCompileInputs.cache
 C:\Users\Dell\Documents\GitHub\RPN-Calculator\RPN-Calculator\RPN-Calculator\obj\Debug\RPN-Calculator.exe
 C:\Users\Dell\Documents\GitHub\RPN-Calculator\RPN-Calculator\RPN-Calculator\obj\Debug\RPN-Calculator.pdb
+C:\Users\Victo\OneDrive\Documentos\Semestre3DTS\EstructurasDeDatos\RPN-Calculator\RPN-Calculator\RPN-Calculator\bin\Debug\RPN-Calculator.exe.config
+C:\Users\Victo\OneDrive\Documentos\Semestre3DTS\EstructurasDeDatos\RPN-Calculator\RPN-Calculator\RPN-Calculator\bin\Debug\RPN-Calculator.exe
+C:\Users\Victo\OneDrive\Documentos\Semestre3DTS\EstructurasDeDatos\RPN-Calculator\RPN-Calculator\RPN-Calculator\bin\Debug\RPN-Calculator.pdb
+C:\Users\Victo\OneDrive\Documentos\Semestre3DTS\EstructurasDeDatos\RPN-Calculator\RPN-Calculator\RPN-Calculator\obj\Debug\RPN-Calculator.csproj.AssemblyReference.cache
+C:\Users\Victo\OneDrive\Documentos\Semestre3DTS\EstructurasDeDatos\RPN-Calculator\RPN-Calculator\RPN-Calculator\obj\Debug\RPN-Calculator.csproj.SuggestedBindingRedirects.cache
+C:\Users\Victo\OneDrive\Documentos\Semestre3DTS\EstructurasDeDatos\RPN-Calculator\RPN-Calculator\RPN-Calculator\obj\Debug\RPN-Calculator.csproj.CoreCompileInputs.cache
+C:\Users\Victo\OneDrive\Documentos\Semestre3DTS\EstructurasDeDatos\RPN-Calculator\RPN-Calculator\RPN-Calculator\obj\Debug\RPN-Calculator.exe
+C:\Users\Victo\OneDrive\Documentos\Semestre3DTS\EstructurasDeDatos\RPN-Calculator\RPN-Calculator\RPN-Calculator\obj\Debug\RPN-Calculator.pdb
