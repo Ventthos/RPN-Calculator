@@ -12,7 +12,7 @@ namespace RPN_Calculator
         {
             RPN rpnCalc = new RPN();
 
-            string expresion = "(3-8)+(5-(-2)))";
+            string expresion = "10 * (4+2) + 3 ^2 * (3 + 4 ) / 3";
             List<string> expresList = rpnCalc.Convertidor(expresion);
             string final = String.Join(" ", expresList);
             Console.WriteLine(final);

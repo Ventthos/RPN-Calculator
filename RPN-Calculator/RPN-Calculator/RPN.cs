@@ -92,11 +92,14 @@ namespace RPN_Calculator
                 case '^':
                     return 3;
                 case '(':
-                    return 4;
+                    return 5;
                 default:
                     throw new ArgumentException("Unexpected operator");
             }
         }
+
+        // TODO: Hay qu hacer que esta cosa acete numeros negativos y el -(), o sea que si pone negativo antes de algo, lo interprete
+        // igual que si hay un numero delante de un paréntesis lo tome como multiplicación
         public List<string> Convertidor(string expresion)
         {
             ArrayStack<char> stack = new ArrayStack<char>();
@@ -106,7 +109,7 @@ namespace RPN_Calculator
             {
                 if (Char.IsDigit(expresion[i]))
                 {
-                    if((i + 1 != expresion.Length-1) && (Char.IsDigit(expresion[i+1]) || expresion[i+1] == '.'))
+                    if((i + 1 != expresion.Length) && (Char.IsDigit(expresion[i+1]) || expresion[i+1] == '.'))
                     {
                         if(number.Contains('.') && expresion[i] == '.')
                         {
@@ -143,6 +146,7 @@ namespace RPN_Calculator
                                 break;
                             }
                             elements.Add(stack.Pop().ToString());
+                            Console.WriteLine($"Quite {expresion[i]}");
                         }
                     }
                     else
@@ -151,9 +155,11 @@ namespace RPN_Calculator
                         {
                             if (stack.Empty || OpPriority(stack.Peek()) < OpPriority(expresion[i]) || stack.Peek() == '(')
                             {
+                                Console.WriteLine($"Agregue {expresion[i]}");
                                 stack.Push(expresion[i]);
                                 break;
                             }
+                            Console.WriteLine($"Encontre un signo de menor importancia {stack.Peek()} es menor que el actual {expresion[i]}");
                             elements.Add(stack.Pop().ToString());
                         }
                     }
@@ -162,8 +168,11 @@ namespace RPN_Calculator
             
             }
             Console.WriteLine(stack.GetDataText());
-            for (int i = 0; i <= stack.Size; i++)
+            Console.WriteLine(stack.Size);
+            int stackSize = stack.Size;
+            for (int i = 0; i < stackSize; i++)
             {
+                Console.WriteLine("Agregando: "+stack.Peek());
                 elements.Add(stack.Pop().ToString());
             }
             return elements;
