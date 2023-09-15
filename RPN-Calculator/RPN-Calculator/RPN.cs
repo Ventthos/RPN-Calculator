@@ -130,6 +130,28 @@ namespace RPN_Calculator
             }
             return false;
         }
+        private char checkBackwards(string expression, int i)
+        {
+            for (int x = i - 1; x >= 0; x--)
+            {
+                if (expression[x] != ' ')
+                {
+                    return expression[x];
+                }
+            }
+            return ' ';
+        }
+        private char checkFordward(string expression, int i)
+        {
+            for (int x = i + 1; x < expression.Length; x++)
+            {
+                if (expression[x] != ' ')
+                {
+                    return expression[x];
+                }
+            }
+            return ' ';
+        }
 
         // TODO: Hay qu hacer que esta cosa acete numeros negativos y el -(), o sea que si pone negativo antes de algo, lo interprete
         // igual que si hay un numero delante de un paréntesis lo tome como multiplicación
@@ -142,12 +164,9 @@ namespace RPN_Calculator
             {
                 if (Char.IsDigit(expresion[i]))
                 {
-                    if((i + 1 != expresion.Length) && (Char.IsDigit(expresion[i+1]) || expresion[i+1] == '.'))
+                    if((i + 1 != expresion.Length) && (Char.IsDigit(checkFordward(expresion, i)) || checkFordward(expresion, i) == '.'))
                     {
-                        if(number.Contains('.') && expresion[i] == '.')
-                        {
-                            throw new ArgumentException("Sintax Error");
-                        }
+                        
                         number += expresion[i];
                         Console.WriteLine(number);
                     }
@@ -167,6 +186,14 @@ namespace RPN_Calculator
                    
                 }
                 else if(expresion[i] == ' '){}
+                else if (expresion[i] == '.')
+                {
+                    if (number.Contains('.') && expresion[i] == '.') 
+                    {
+                        throw new ArgumentException("Sintax Error");
+                    }
+                    number += expresion[i];
+                }
                 else
                 {
                     if (expresion[i] == ')' || expresion[i] == ']' || expresion[i] == '}')
@@ -185,7 +212,7 @@ namespace RPN_Calculator
                     }
                     else
                     {
-                        if (expresion[i] == '-' && i > 0 && !checkBackwardsDigit(expresion, i) && (i != expresion.Length) && checkFrontNumber(expresion, i))
+                        if (expresion[i] == '-' && !Char.IsDigit(checkBackwards(expresion, i))  && Char.IsDigit(checkFordward(expresion, i)))
                         {
                             number += expresion[i];
                         }
