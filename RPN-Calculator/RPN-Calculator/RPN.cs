@@ -92,10 +92,43 @@ namespace RPN_Calculator
                 case '^':
                     return 3;
                 case '(':
+                case '[':
+                case '{':
                     return 5;
                 default:
                     throw new ArgumentException("Unexpected operator");
             }
+        }
+
+        private bool checkBackwardsDigit(string expression, int i)
+        {
+            for (int x = i-1; x >= 0; x--)
+            {
+                if (expression != " ")
+                {
+                    if (Char.IsDigit(expression[x]))
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            return true;
+        }
+        private bool checkFrontNumber(string expression, int i)
+        {
+            for (int x = i+1; x < expression.Length; x++)
+            {
+                if (expression != " ")
+                {
+                    if (Char.IsDigit(expression[x]))
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            return false;
         }
 
         // TODO: Hay qu hacer que esta cosa acete numeros negativos y el -(), o sea que si pone negativo antes de algo, lo interprete
@@ -136,36 +169,45 @@ namespace RPN_Calculator
                 else if(expresion[i] == ' '){}
                 else
                 {
-                    if (expresion[i] == ')')
+                    if (expresion[i] == ')' || expresion[i] == ']' || expresion[i] == '}')
                     {
                         while (!stack.Empty)
                         {
-                            if (stack.Peek() == '(')
+                            if (stack.Peek() == '(' || stack.Peek() == '[' || stack.Peek() == '{')
                             {
                                 stack.Pop();
                                 break;
                             }
+                            Console.WriteLine($"Quite {stack.Peek()}");
                             elements.Add(stack.Pop().ToString());
-                            Console.WriteLine($"Quite {expresion[i]}");
+                            
                         }
                     }
                     else
                     {
-                        while (true)
+                        if (expresion[i] == '-' && i > 0 && !checkBackwardsDigit(expresion, i) && (i != expresion.Length) && checkFrontNumber(expresion, i))
                         {
-                            if (stack.Empty || OpPriority(stack.Peek()) < OpPriority(expresion[i]) || stack.Peek() == '(')
-                            {
-                                Console.WriteLine($"Agregue {expresion[i]}");
-                                stack.Push(expresion[i]);
-                                break;
-                            }
-                            Console.WriteLine($"Encontre un signo de menor importancia {stack.Peek()} es menor que el actual {expresion[i]}");
-                            elements.Add(stack.Pop().ToString());
+                            number += expresion[i];
                         }
+                        else
+                        {
+                            while (true)
+                            {
+                                if (stack.Empty || OpPriority(stack.Peek()) < OpPriority(expresion[i]) || stack.Peek() == '(' || stack.Peek() == '[' || stack.Peek() == '{')
+                                {
+                                    Console.WriteLine($"Agregue {expresion[i]}");
+                                    stack.Push(expresion[i]);
+                                    break;
+                                }
+                                Console.WriteLine($"Encontre un signo de menor importancia {stack.Peek()} es menor que el actual {expresion[i]}");
+                                elements.Add(stack.Pop().ToString());
+                            }
+                        }
+                        
                     }
                 }
                 
-            
+           
             }
             Console.WriteLine(stack.GetDataText());
             Console.WriteLine(stack.Size);

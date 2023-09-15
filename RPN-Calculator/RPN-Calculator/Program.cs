@@ -11,12 +11,15 @@ namespace RPN_Calculator
         static void Main(string[] args)
         {
             RPN rpnCalc = new RPN();
-
-            string expresion = "10 * (4+2) + 3 ^2 * (3 + 4 ) / 3";
-            List<string> expresList = rpnCalc.Convertidor(expresion);
-            string final = String.Join(" ", expresList);
-            Console.WriteLine(final);
-            Console.WriteLine($"Resultado: {rpnCalc.Evaluador(expresList)}");
+            
+                Console.WriteLine("Escriba la expresión");
+                string expresion = Console.ReadLine();
+                List<string> expresList = rpnCalc.Convertidor(expresion);
+                string final = String.Join(" ", expresList);
+                Console.WriteLine(final);
+                Console.WriteLine($"Resultado: {rpnCalc.Evaluador(expresList)}");
+            
+            
         }
     }
 }
