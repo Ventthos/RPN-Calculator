@@ -32,7 +32,7 @@ namespace RPN_Calculator
             for (int i = 0; i < expresion.Length; i++)
             {
                 switch (expresion[i])
-                {
+                { 
                     case ')':
                         stack.Pop();
                         break;
