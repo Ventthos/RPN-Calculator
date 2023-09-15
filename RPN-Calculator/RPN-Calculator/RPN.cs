@@ -146,8 +146,10 @@ namespace RPN_Calculator
                     {
                         if(number.Contains('.') && expresion[i] == '.')
                         {
+                            //porque el siguiente es un . y ahorita ya hay 1 punto
                             throw new ArgumentException("Sintax Error");
                         }
+                        //si no se añade el numero y / o la expresion
                         number += expresion[i];
                         Console.WriteLine(number);
                     }
@@ -166,7 +168,7 @@ namespace RPN_Calculator
                     }
                    
                 }
-                else if(expresion[i] == ' '){}
+                else if(expresion[i] == ' '){}//si es un espacio lo ignora
                 else
                 {
                     if (expresion[i] == ')' || expresion[i] == ']' || expresion[i] == '}')
@@ -252,7 +254,7 @@ namespace RPN_Calculator
                         case "/":
                             if( numero2 == 0)
                             {
-                                throw new DivideByZeroException("Tryed to divide by zero");
+                                throw new DivideByZeroException("Tried to divide by zero");
                             }
                             actionQueue.Push(numero1 / numero2);
                             break;
