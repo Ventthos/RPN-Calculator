@@ -32,7 +32,7 @@ namespace RPN_Calculator
             for (int i = 0; i < expresion.Length; i++)
             {
                 switch (expresion[i])
-                {
+                { 
                     case ')':
                         stack.Pop();
                         break;
@@ -279,7 +279,7 @@ namespace RPN_Calculator
                         case "/":
                             if( numero2 == 0)
                             {
-                                throw new DivideByZeroException("Tryed to divide by zero");
+                                throw new DivideByZeroException("Tried to divide by zero");
                             }
                             actionQueue.Push(numero1 / numero2);
                             break;
