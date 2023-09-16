@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace RPN_Calculator
 {
@@ -100,36 +101,7 @@ namespace RPN_Calculator
             }
         }
 
-        private bool checkBackwardsDigit(string expression, int i)
-        {
-            for (int x = i-1; x >= 0; x--)
-            {
-                if (expression != " ")
-                {
-                    if (Char.IsDigit(expression[x]))
-                    {
-                        return true;
-                    }
-                    return false;
-                }
-            }
-            return true;
-        }
-        private bool checkFrontNumber(string expression, int i)
-        {
-            for (int x = i+1; x < expression.Length; x++)
-            {
-                if (expression != " ")
-                {
-                    if (Char.IsDigit(expression[x]))
-                    {
-                        return true;
-                    }
-                    return false;
-                }
-            }
-            return false;
-        }
+       
         private char checkBackwards(string expression, int i)
         {
             for (int x = i - 1; x >= 0; x--)
@@ -151,6 +123,20 @@ namespace RPN_Calculator
                 }
             }
             return ' ';
+        }
+        private void OutputOperators(string expresion, ArrayStack<char> stack, List<string> elements, char currentChar)
+        {
+            while (true)
+            {
+                if (stack.Empty || OpPriority(stack.Peek()) < OpPriority(currentChar) || stack.Peek() == '(' || stack.Peek() == '[' || stack.Peek() == '{')
+                {
+                    //Console.WriteLine($"Agregue {expresion[i]}");
+                    stack.Push(currentChar);
+                    break;
+                }
+                //Console.WriteLine($"Encontre un signo de menor importancia {stack.Peek()} es menor que el actual {expresion[i]}");
+                elements.Add(stack.Pop().ToString());
+            }
         }
 
         // TODO: Hay qu hacer que esta cosa acete numeros negativos y el -(), o sea que si pone negativo antes de algo, lo interprete
@@ -212,23 +198,17 @@ namespace RPN_Calculator
                     }
                     else
                     {
-                        if (expresion[i] == '-' && !Char.IsDigit(checkBackwards(expresion, i))  && Char.IsDigit(checkFordward(expresion, i)))
+                        if (expresion[i] == '-' && !Char.IsDigit(checkBackwards(expresion, i)) && checkBackwards(expresion, i) != ')' && checkBackwards(expresion, i) != ']' && checkBackwards(expresion, i) != '}' && Char.IsDigit(checkFordward(expresion, i)))
                         {
                             number += expresion[i];
                         }
                         else
                         {
-                            while (true)
+                            if ((expresion[i] == '(' || expresion[i] == '[' || expresion[i] == '{') && Char.IsDigit(checkBackwards(expresion, i)))
                             {
-                                if (stack.Empty || OpPriority(stack.Peek()) < OpPriority(expresion[i]) || stack.Peek() == '(' || stack.Peek() == '[' || stack.Peek() == '{')
-                                {
-                                    Console.WriteLine($"Agregue {expresion[i]}");
-                                    stack.Push(expresion[i]);
-                                    break;
-                                }
-                                Console.WriteLine($"Encontre un signo de menor importancia {stack.Peek()} es menor que el actual {expresion[i]}");
-                                elements.Add(stack.Pop().ToString());
+                                OutputOperators(expresion, stack, elements, '*');
                             }
+                            OutputOperators(expresion, stack, elements, expresion[i]);
                         }
                         
                     }
@@ -259,39 +239,47 @@ namespace RPN_Calculator
                 }
                 else if(element == "+" || element == "-" || element == "*" || element == "/" || element == "^")
                 {
-                    double numero2 = actionQueue.Pop();
-                    double numero1 = actionQueue.Pop();
-                    
-                    switch (element)
+                    if(actionQueue.Size >= 2)
                     {
-                        case "+":
-                            actionQueue.Push(numero1 + numero2);
-                            break;
+                        double numero2 = actionQueue.Pop();
+                        double numero1 = actionQueue.Pop();
 
-                        case "-":
-                            actionQueue.Push(numero1 - numero2);
-                            break;
+                        switch (element)
+                        {
+                            case "+":
+                                actionQueue.Push(numero1 + numero2);
+                                break;
 
-                        case "*":
-                            actionQueue.Push(numero1 * numero2);
-                            break;
+                            case "-":
+                                actionQueue.Push(numero1 - numero2);
+                                break;
 
-                        case "/":
-                            if( numero2 == 0)
-                            {
-                                throw new DivideByZeroException("Tried to divide by zero");
-                            }
-                            actionQueue.Push(numero1 / numero2);
-                            break;
+                            case "*":
+                                actionQueue.Push(numero1 * numero2);
+                                break;
 
-                        case "^":
-                            actionQueue.Push(Math.Pow(numero1, numero2));
-                            break;
+                            case "/":
+                                if (numero2 == 0)
+                                {
+                                    throw new DivideByZeroException("Tried to divide by zero");
+                                }
+                                actionQueue.Push(numero1 / numero2);
+                                break;
 
-                        default:
-                            throw new ArgumentException("Unexpected operator");
-                            
+                            case "^":
+                                actionQueue.Push(Math.Pow(numero1, numero2));
+                                break;
+
+                            default:
+                                throw new ArgumentException("Unexpected operator");
+
+                        }
                     }
+                    else
+                    {
+                        throw new ArgumentException("Sintax error");
+                    }
+                    
                 }
                 
             }
