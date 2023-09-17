@@ -79,6 +79,48 @@ namespace RPN_Calculator
                 return false;
             }
         }
+        private char OpeningParentheses(char closing)
+        {
+            switch (closing)
+            {
+                case ')':
+                    return '(';
+                case ']':
+                    return '[';
+                case '}':
+                    return '{';
+                default:
+                    return ' ';
+            }
+        }
+
+        public bool CheckParentheses(string expression)
+        {
+            ArrayStack<char> stack = new ArrayStack<char>();
+            for (int i = 0; i < expression.Length; i++)
+            {
+                if (expression[i] == '(' || expression[i] == '[' || expression[i] == '{')
+                {
+                    stack.Push(expression[i]);
+                }
+                else if (expression[i] == ')' || expression[i] == ']' || expression[i] == '}')
+                {
+                    if (stack.Size > 0 && stack.Peek() == OpeningParentheses(expression[i]))
+                    {
+                        stack.Pop();
+                        continue;
+                    }
+                    return false;
+                }
+            }
+            if (stack.Empty)
+            {
+                return true;
+            }
+            
+            return false;
+           
+        }
 
         private int OpPriority(char op)
         {

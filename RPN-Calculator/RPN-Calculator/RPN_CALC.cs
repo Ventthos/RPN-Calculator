@@ -15,7 +15,7 @@ namespace RPN_Calculator
         public void Calculator()
         {
             
-            ArrayStack<double> Stack = new ArrayStack<double>(3);
+            ArrayStack<double> Stack = new ArrayStack<double>();
             while (true)
             {
                 ImprimirStack(Stack);
@@ -89,7 +89,7 @@ namespace RPN_Calculator
                 {
                     try
                     {
-                        double resultado = EvaluarExpresion(entrada);
+                        double resultado = EvaluarExpresion(entrada, Stack);
                         Stack.Push(resultado);
                     }
                     catch (Exception e)
@@ -137,24 +137,27 @@ namespace RPN_Calculator
             }
         }
 
-        private double EvaluarExpresion(string expresion)
+        private double EvaluarExpresion(string expresion, ArrayStack<double> arrayStack)
         {
+            
             string[] elements = expresion.Split(' ');
             List<string> elementsList = elements.ToList();
 
+            if(elementsList.Count == 2 && arrayStack.Size > 0)
+            {
+                if( EsNumero(elementsList[0]) && EsOperador(elementsList[1]))
+                {
+                    return AplicarOperador(arrayStack.Pop(), double.Parse(elementsList[0]), elementsList[1]);
+                }
+                else
+                {
+                    throw new ArgumentException("Sintax Error");
+                }
+
+            }
+
             return rpnFunctions.Evaluador(elementsList);
-            /*
-            try
-            {
-                var dataTable = new DataTable();
-                dataTable.Columns.Add("expresion", typeof(string), expresion);
-                return double.Parse((string)dataTable.Compute("expresion", string.Empty));
-            }
-            catch (Exception)
-            {
-                throw new InvalidOperationException("La expresión no está bien formada");
-            }
-            */
+            
         }
         
         void ImprimirStack(ArrayStack<double> arrayStack)
