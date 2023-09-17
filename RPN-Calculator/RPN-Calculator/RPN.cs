@@ -172,17 +172,16 @@ namespace RPN_Calculator
             {
                 if (stack.Empty || OpPriority(stack.Peek()) < OpPriority(currentChar) || stack.Peek() == '(' || stack.Peek() == '[' || stack.Peek() == '{')
                 {
-                    //Console.WriteLine($"Agregue {expresion[i]}");
+                   
                     stack.Push(currentChar);
                     break;
                 }
-                //Console.WriteLine($"Encontre un signo de menor importancia {stack.Peek()} es menor que el actual {expresion[i]}");
+                
                 elements.Add(stack.Pop().ToString());
             }
         }
 
-        // TODO: Hay qu hacer que esta cosa acete numeros negativos y el -(), o sea que si pone negativo antes de algo, lo interprete
-        // igual que si hay un numero delante de un paréntesis lo tome como multiplicación
+        // TODO: Agregar un checador de expresiones que cheque si la expresión puesta está bien
         public List<string> Convertidor(string expresion)
         {
             ArrayStack<char> stack = new ArrayStack<char>();
