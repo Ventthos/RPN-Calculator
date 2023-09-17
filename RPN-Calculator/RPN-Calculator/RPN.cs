@@ -9,76 +9,7 @@ namespace RPN_Calculator
 {
     internal class RPN
     {
-        public bool Check(string expresion)
-        {
-            ArrayStack<char> stack = new ArrayStack<char>();
-            for (int i = 0; i < expresion.Length; i++)
-            {
-                switch (expresion[i])
-                {
-                    case '(':
-                        stack.Push('(');
-                        break;
-
-                    case '{':
-                        stack.Push('{');
-                        break;
-
-                    case '[':
-                        stack.Push('[');
-                        break; 
-                }
-                
-            }
-            for (int i = 0; i < expresion.Length; i++)
-            {
-                switch (expresion[i])
-                { 
-                    case ')':
-                        stack.Pop();
-                        break;
-
-                    case '}':
-                        stack.Pop();
-                        break;
-
-                    case ']':
-                        stack.Pop();
-                        break;
-                }
-            }
-            bool isRight = false;
-            for (int i = 0; i < expresion.Length; i++)
-            {
-                bool bandera = false;
-                switch (expresion[i])
-                {
-                    case '+':
-                        bandera = true;
-                        break;
-                    case '-':
-                        bandera = true;
-                        break;
-                    case '*':
-                        bandera = true;
-                        break;
-                    case '/':
-                        bandera = true;
-                        break;
-                    case '^':
-                        bandera = true;
-                        break;
-
-                }
-            }
-            if (stack.Empty)
-            {
-                return true;
-            } else
-            {
-                return false;
-            }
-        }
+       
         private char OpeningParentheses(char closing)
         {
             switch (closing)
@@ -92,6 +23,52 @@ namespace RPN_Calculator
                 default:
                     return ' ';
             }
+        }
+
+        private bool EsOperador(char entrada)
+        {
+            return entrada == '+' || entrada == '-' || entrada == '*' || entrada == '/';
+        }
+
+        private char checkBackwards(string expression, int i)
+        {
+            for (int x = i - 1; x >= 0; x--)
+            {
+                if (expression[x] != ' ')
+                {
+                    return expression[x];
+                }
+            }
+            return ' ';
+        }
+
+        private char checkFordward(string expression, int i)
+        {
+            for (int x = i + 1; x < expression.Length; x++)
+            {
+                if (expression[x] != ' ')
+                {
+                    return expression[x];
+                }
+            }
+            return ' ';
+        }
+
+        public bool CheckExpressionOperators(string expression)
+        {
+            expression = expression.Replace(" ", "");
+            Console.WriteLine(expression);
+            for (int i = 0; i < expression.Length; i++)
+            {
+                if(i + 1 <= expression.Length)
+                {
+                    if(EsOperador(expression[i]) && EsOperador(expression[i + 1]))
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
 
         public bool CheckParentheses(string expression)
@@ -144,28 +121,7 @@ namespace RPN_Calculator
         }
 
        
-        private char checkBackwards(string expression, int i)
-        {
-            for (int x = i - 1; x >= 0; x--)
-            {
-                if (expression[x] != ' ')
-                {
-                    return expression[x];
-                }
-            }
-            return ' ';
-        }
-        private char checkFordward(string expression, int i)
-        {
-            for (int x = i + 1; x < expression.Length; x++)
-            {
-                if (expression[x] != ' ')
-                {
-                    return expression[x];
-                }
-            }
-            return ' ';
-        }
+        
         private void OutputOperators(string expresion, ArrayStack<char> stack, List<string> elements, char currentChar)
         {
             while (true)
@@ -187,88 +143,93 @@ namespace RPN_Calculator
             ArrayStack<char> stack = new ArrayStack<char>();
             List<string> elements = new List<string>();
             string number = "";
-            for (int i = 0; i < expresion.Length; i++)
+            if(CheckParentheses(expresion) && CheckExpressionOperators(expresion))
             {
-                if (Char.IsDigit(expresion[i]))
+                for (int i = 0; i < expresion.Length; i++)
                 {
-                    if((i + 1 != expresion.Length) && (Char.IsDigit(checkFordward(expresion, i)) || checkFordward(expresion, i) == '.'))
+                    if (Char.IsDigit(expresion[i]))
                     {
-                        
+                        if ((i + 1 != expresion.Length) && (Char.IsDigit(checkFordward(expresion, i)) || checkFordward(expresion, i) == '.'))
+                        {
+
+                            number += expresion[i];
+                            Console.WriteLine(number);
+                        }
+                        else
+                        {
+                            if (number != "")
+                            {
+                                number += expresion[i];
+                                elements.Add(number);
+                                number = "";
+                            }
+                            else
+                            {
+                                elements.Add(expresion[i].ToString());
+                            }
+                        }
+
+                    }
+                    else if (expresion[i] == ' ') { }
+                    else if (expresion[i] == '.')
+                    {
+                        if (number.Contains('.') && expresion[i] == '.')
+                        {
+                            throw new ArgumentException("Sintax Error");
+                        }
                         number += expresion[i];
-                        Console.WriteLine(number);
                     }
                     else
                     {
-                        if (number != "")
+                        if (expresion[i] == ')' || expresion[i] == ']' || expresion[i] == '}')
                         {
-                            number += expresion[i];
-                            elements.Add(number);
-                            number = "";
+                            while (!stack.Empty)
+                            {
+                                if (stack.Peek() == '(' || stack.Peek() == '[' || stack.Peek() == '{')
+                                {
+                                    stack.Pop();
+                                    break;
+                                }
+                                Console.WriteLine($"Quite {stack.Peek()}");
+                                elements.Add(stack.Pop().ToString());
+
+                            }
                         }
                         else
                         {
-                            elements.Add(expresion[i].ToString());
-                        }
-                    }
-                   
-                }
-                else if(expresion[i] == ' '){}
-                else if (expresion[i] == '.')
-                {
-                    if (number.Contains('.') && expresion[i] == '.') 
-                    {
-                        throw new ArgumentException("Sintax Error");
-                    }
-                    number += expresion[i];
-                }
-                else
-                {
-                    if (expresion[i] == ')' || expresion[i] == ']' || expresion[i] == '}')
-                    {
-                        while (!stack.Empty)
-                        {
-                            if (stack.Peek() == '(' || stack.Peek() == '[' || stack.Peek() == '{')
+                            if (expresion[i] == '-' && !Char.IsDigit(checkBackwards(expresion, i)) && checkBackwards(expresion, i) != ')' && checkBackwards(expresion, i) != ']' && checkBackwards(expresion, i) != '}' && Char.IsDigit(checkFordward(expresion, i)))
                             {
-                                stack.Pop();
-                                break;
+                                number += expresion[i];
                             }
-                            Console.WriteLine($"Quite {stack.Peek()}");
-                            elements.Add(stack.Pop().ToString());
-                            
-                        }
-                    }
-                    else
-                    {
-                        if (expresion[i] == '-' && !Char.IsDigit(checkBackwards(expresion, i)) && checkBackwards(expresion, i) != ')' && checkBackwards(expresion, i) != ']' && checkBackwards(expresion, i) != '}' && Char.IsDigit(checkFordward(expresion, i)))
-                        {
-                            number += expresion[i];
-                        }
-                        else
-                        {
-                            if ((expresion[i] == '(' || expresion[i] == '[' || expresion[i] == '{') && Char.IsDigit(checkBackwards(expresion, i)))
+                            else
                             {
-                                OutputOperators(expresion, stack, elements, '*');
+                                if ((expresion[i] == '(' || expresion[i] == '[' || expresion[i] == '{') && Char.IsDigit(checkBackwards(expresion, i)))
+                                {
+                                    OutputOperators(expresion, stack, elements, '*');
+                                }
+                                OutputOperators(expresion, stack, elements, expresion[i]);
                             }
-                            OutputOperators(expresion, stack, elements, expresion[i]);
+
                         }
-                        
                     }
+
+
                 }
-                
-           
+                Console.WriteLine(stack.GetDataText());
+                Console.WriteLine(stack.Size);
+                int stackSize = stack.Size;
+                for (int i = 0; i < stackSize; i++)
+                {
+                    Console.WriteLine("Agregando: " + stack.Peek());
+                    elements.Add(stack.Pop().ToString());
+                }
+                return elements;
             }
-            Console.WriteLine(stack.GetDataText());
-            Console.WriteLine(stack.Size);
-            int stackSize = stack.Size;
-            for (int i = 0; i < stackSize; i++)
-            {
-                Console.WriteLine("Agregando: "+stack.Peek());
-                elements.Add(stack.Pop().ToString());
-            }
-            return elements;
+            throw new ArgumentException("Sintax error");
 
         }
 
+        // TODO: Hacer que haga que si, es negativo, y solo queda un elemento, entonces vuelva el elemento negativo, tipo, que acepte -(6 + 3)
         public double Evaluador(List<string> elements)
         {
             ArrayStack<double> actionQueue = new ArrayStack<double>();
@@ -315,6 +276,12 @@ namespace RPN_Calculator
                                 throw new ArgumentException("Unexpected operator");
 
                         }
+                        
+                    }
+                    else if (actionQueue.Size == 1 && element == "-")
+                    {
+                        double number = actionQueue.Pop();
+                        actionQueue.Push(number * -1);
                     }
                     else
                     {
