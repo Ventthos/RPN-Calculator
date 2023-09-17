@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Console;
 
 namespace RPN_Calculator
 {
@@ -10,6 +11,7 @@ namespace RPN_Calculator
     {
         static void Main(string[] args)
         {
+            /*
             RPN rpnCalc = new RPN();
             
                 Console.WriteLine("Escriba la expresión");
@@ -19,7 +21,14 @@ namespace RPN_Calculator
                 Console.WriteLine(final);
                 Console.WriteLine($"Resultado: {rpnCalc.Evaluador(expresList)}");
             
-            
+            */
+
+
+            WriteLine("Calculadora RPN");
+            Stack<double> Stack = new Stack<double>();
+            RPN rpn = new RPN();
+            RPN_CALC rpnCalc = new RPN_CALC();
+            rpnCalc.Calculator();
         }
     }
 }

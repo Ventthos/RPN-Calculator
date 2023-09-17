@@ -66,6 +66,16 @@ namespace RPN_Calculator
                 }
                 return data[Size - 1];
             }
+
+            public void Clear()
+            {
+            Size = 0;
+            }
+
+            public T[] ToArray()
+            {
+                return data;
+            }
 #if DEBUG
             public string GetDataText()
             {

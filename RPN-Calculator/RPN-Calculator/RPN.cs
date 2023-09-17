@@ -281,6 +281,10 @@ namespace RPN_Calculator
                     }
                     
                 }
+                else
+                {
+                    throw new ArgumentException("Sintax error");
+                }
                 
             }
             
