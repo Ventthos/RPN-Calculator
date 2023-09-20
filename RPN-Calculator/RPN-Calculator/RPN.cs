@@ -25,9 +25,17 @@ namespace RPN_Calculator
             }
         }
 
-        private bool EsOperador(char entrada)
+        private bool EsOperador(string entrada)
         {
-            return entrada == '+' || entrada == '-' || entrada == '*' || entrada == '/';
+            return entrada == "+" || entrada == "-" || entrada == "*" || entrada == "/" || entrada == "^";
+        }
+        private bool EsParentesisAbertura(char entrada)
+        {
+            return entrada == '(' || entrada == '[' || entrada == '{';
+        }
+        private bool EsParentesisCierre(char entrada)
+        {
+            return entrada == ')' || entrada == ']' || entrada == '}';
         }
 
         private char checkBackwards(string expression, int i)
@@ -62,7 +70,7 @@ namespace RPN_Calculator
             {
                 if(i + 1 <= expression.Length)
                 {
-                    if(EsOperador(expression[i]) && EsOperador(expression[i + 1]))
+                    if(EsOperador(expression[i].ToString()) && EsOperador(expression[i + 1].ToString()))
                     {
                         return false;
                     }
@@ -76,11 +84,11 @@ namespace RPN_Calculator
             ArrayStack<char> stack = new ArrayStack<char>();
             for (int i = 0; i < expression.Length; i++)
             {
-                if (expression[i] == '(' || expression[i] == '[' || expression[i] == '{')
+                if (EsParentesisAbertura(expression[i]))
                 {
                     stack.Push(expression[i]);
                 }
-                else if (expression[i] == ')' || expression[i] == ']' || expression[i] == '}')
+                else if (EsParentesisCierre(expression[i]))
                 {
                     if (stack.Size > 0 && stack.Peek() == OpeningParentheses(expression[i]))
                     {
@@ -126,7 +134,7 @@ namespace RPN_Calculator
         {
             while (true)
             {
-                if (stack.Empty || OpPriority(stack.Peek()) < OpPriority(currentChar) || stack.Peek() == '(' || stack.Peek() == '[' || stack.Peek() == '{')
+                if (stack.Empty || OpPriority(stack.Peek()) < OpPriority(currentChar) || EsParentesisAbertura(stack.Peek()))
                 {
                    
                     stack.Push(currentChar);
@@ -138,7 +146,7 @@ namespace RPN_Calculator
         }
 
         
-        public List<string> Convertidor(string expresion)
+        public List<string> ConvertToRPN(string expresion)
         {
             ArrayStack<char> stack = new ArrayStack<char>();
             List<string> elements = new List<string>();
@@ -153,7 +161,7 @@ namespace RPN_Calculator
                         {
 
                             number += expresion[i];
-                            Console.WriteLine(number);
+                            
                         }
                         else
                         {
@@ -181,29 +189,29 @@ namespace RPN_Calculator
                     }
                     else
                     {
-                        if (expresion[i] == ')' || expresion[i] == ']' || expresion[i] == '}')
+                        if (EsParentesisCierre(expresion[i]))
                         {
                             while (!stack.Empty)
                             {
-                                if (stack.Peek() == '(' || stack.Peek() == '[' || stack.Peek() == '{')
+                                if (EsParentesisAbertura(stack.Peek()))
                                 {
                                     stack.Pop();
                                     break;
                                 }
-                                Console.WriteLine($"Quite {stack.Peek()}");
                                 elements.Add(stack.Pop().ToString());
 
                             }
                         }
                         else
                         {
-                            if (expresion[i] == '-' && !Char.IsDigit(checkBackwards(expresion, i)) && checkBackwards(expresion, i) != ')' && checkBackwards(expresion, i) != ']' && checkBackwards(expresion, i) != '}' && Char.IsDigit(checkFordward(expresion, i)))
+                            char backwardElement = checkBackwards(expresion, i);
+                            if (expresion[i] == '-' && !Char.IsDigit(backwardElement) && !EsParentesisCierre(backwardElement) && Char.IsDigit(checkFordward(expresion, i)))
                             {
                                 number += expresion[i];
                             }
                             else
                             {
-                                if ((expresion[i] == '(' || expresion[i] == '[' || expresion[i] == '{') && Char.IsDigit(checkBackwards(expresion, i)))
+                                if (EsParentesisAbertura(expresion[i]) && Char.IsDigit(backwardElement))
                                 {
                                     OutputOperators(expresion, stack, elements, '*');
                                 }
@@ -215,8 +223,7 @@ namespace RPN_Calculator
 
 
                 }
-                Console.WriteLine(stack.GetDataText());
-                Console.WriteLine(stack.Size);
+                
                 int stackSize = stack.Size;
                 for (int i = 0; i < stackSize; i++)
                 {
@@ -230,7 +237,7 @@ namespace RPN_Calculator
         }
 
         // TODO: Hacer que haga que si, es negativo, y solo queda un elemento, entonces vuelva el elemento negativo, tipo, que acepte -(6 + 3)
-        public double Evaluador(List<string> elements)
+        public double EvaluateRPN(List<string> elements)
         {
             ArrayStack<double> actionQueue = new ArrayStack<double>();
             foreach (string element in elements)
@@ -239,7 +246,7 @@ namespace RPN_Calculator
                 {
                     actionQueue.Push(numero);
                 }
-                else if(element == "+" || element == "-" || element == "*" || element == "/" || element == "^")
+                else if(EsOperador(element))
                 {
                     if(actionQueue.Size >= 2)
                     {
