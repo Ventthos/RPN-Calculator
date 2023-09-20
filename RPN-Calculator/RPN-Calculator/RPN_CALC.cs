@@ -109,7 +109,7 @@ namespace RPN_Calculator
 
         private bool EsOperador(string entrada)
         {
-            return entrada == "+" || entrada == "-" || entrada == "*" || entrada == "/";
+            return entrada == "+" || entrada == "-" || entrada == "*" || entrada == "/" || entrada =="^";
         }
 
         private double AplicarOperador(double operando1, double operando2, string operador)
