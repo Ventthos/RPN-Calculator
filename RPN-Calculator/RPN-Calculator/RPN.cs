@@ -137,7 +137,7 @@ namespace RPN_Calculator
             }
         }
 
-        // TODO: Agregar un checador de expresiones que cheque si la expresión puesta está bien
+        
         public List<string> Convertidor(string expresion)
         {
             ArrayStack<char> stack = new ArrayStack<char>();
