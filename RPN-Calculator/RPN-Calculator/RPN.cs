@@ -176,10 +176,10 @@ namespace RPN_Calculator
                         }
 
                     }
-                    else if (expresion[i] == ' ') { }
+                 
                     else if (expresion[i] == '.')
                     {
-                        if (number.Contains('.') && expresion[i] == '.')
+                        if (number.Contains('.'))
                         {
                             throw new ArgumentException("Sintax Error");
                         }
@@ -233,7 +233,6 @@ namespace RPN_Calculator
 
         }
 
-        // TODO: Hacer que haga que si, es negativo, y solo queda un elemento, entonces vuelva el elemento negativo, tipo, que acepte -(6 + 3)
         public double EvaluateRPN(List<string> elements)
         {
             ArrayStack<double> actionQueue = new ArrayStack<double>();
