@@ -64,7 +64,7 @@ namespace RPN_Calculator
             {
                 if(i + 1 < expression.Length)
                 {
-                    if(EsOperador(expression[i].ToString()) && EsOperador(expression[i + 1].ToString()))
+                    if(EsOperador(expression[i].ToString()) && (EsOperador(expression[i + 1].ToString()) || EsParentesisCierre(expression[i+1])))
                     {
                         return false;
                     }
