@@ -68,7 +68,7 @@ namespace RPN_Calculator
             Console.WriteLine(expression);
             for (int i = 0; i < expression.Length; i++)
             {
-                if(i + 1 <= expression.Length)
+                if(i + 1 < expression.Length)
                 {
                     if(EsOperador(expression[i].ToString()) && EsOperador(expression[i + 1].ToString()))
                     {
@@ -76,6 +76,9 @@ namespace RPN_Calculator
                     }
                 }
             }
+            if (EsOperador(expression[expression.Length - 1].ToString()))
+                return false;
+
             return true;
         }
 
@@ -211,7 +214,7 @@ namespace RPN_Calculator
                             }
                             else
                             {
-                                if (EsParentesisAbertura(expresion[i]) && Char.IsDigit(backwardElement))
+                                if (EsParentesisAbertura(expresion[i]) && (Char.IsDigit(backwardElement)|| EsParentesisCierre(backwardElement)))
                                 {
                                     OutputOperators(expresion, stack, elements, '*');
                                 }
@@ -290,6 +293,8 @@ namespace RPN_Calculator
                         double number = actionQueue.Pop();
                         actionQueue.Push(number * -1);
                     }
+                    else if (actionQueue.Size == 1 && element == "+") { }
+                    
                     else
                     {
                         throw new ArgumentException("Sintax error");

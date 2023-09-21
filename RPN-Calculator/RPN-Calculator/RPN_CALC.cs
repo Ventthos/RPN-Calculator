@@ -156,7 +156,7 @@ namespace RPN_Calculator
 
             }
 
-            return rpnFunctions.Evaluador(elementsList);
+            return rpnFunctions.EvaluateRPN(elementsList);
             
         }
         
