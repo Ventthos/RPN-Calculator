@@ -97,8 +97,6 @@ namespace RPN_Calculator
                         WriteLine("Error: " + e.Message);
                     }
                 }
-
-               // WriteLine("Stack: " + string.Join(", ", Stack.Reverse()));
             }
         }
 
