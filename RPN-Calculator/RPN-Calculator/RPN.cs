@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -40,24 +41,18 @@ namespace RPN_Calculator
 
         private char checkBackwards(string expression, int i)
         {
-            for (int x = i - 1; x >= 0; x--)
+            if (i - 1 >= 0)
             {
-                if (expression[x] != ' ')
-                {
-                    return expression[x];
-                }
+                return expression[i - 1];
             }
             return ' ';
         }
 
         private char checkFordward(string expression, int i)
         {
-            for (int x = i + 1; x < expression.Length; x++)
+            if(i + 1 < expression.Length)
             {
-                if (expression[x] != ' ')
-                {
-                    return expression[x];
-                }
+                return expression[i + 1];
             }
             return ' ';
         }
@@ -65,7 +60,6 @@ namespace RPN_Calculator
         public bool CheckExpressionOperators(string expression)
         {
             expression = expression.Replace(" ", "");
-            Console.WriteLine(expression);
             for (int i = 0; i < expression.Length; i++)
             {
                 if(i + 1 < expression.Length)
@@ -156,6 +150,7 @@ namespace RPN_Calculator
             string number = "";
             if(CheckParentheses(expresion) && CheckExpressionOperators(expresion))
             {
+                expresion = expresion.Replace(" ", "");
                 for (int i = 0; i < expresion.Length; i++)
                 {
                     if (Char.IsDigit(expresion[i]))
@@ -230,7 +225,6 @@ namespace RPN_Calculator
                 int stackSize = stack.Size;
                 for (int i = 0; i < stackSize; i++)
                 {
-                    Console.WriteLine("Agregando: " + stack.Peek());
                     elements.Add(stack.Pop().ToString());
                 }
                 return elements;
