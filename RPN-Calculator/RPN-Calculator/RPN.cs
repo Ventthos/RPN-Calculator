@@ -166,6 +166,7 @@ namespace RPN_Calculator
                             if (number != "")
                             {
                                 number += expresion[i];
+
                                 elements.Add(number);
                                 number = "";
                             }
@@ -179,7 +180,7 @@ namespace RPN_Calculator
                  
                     else if (expresion[i] == '.')
                     {
-                        if (number.Contains('.'))
+                        if (number.Contains('.') || !Char.IsDigit(checkFordward(expresion, i)) )
                         {
                             throw new ArgumentException("Sintax Error");
                         }
@@ -307,7 +308,5 @@ namespace RPN_Calculator
             }
             return actionQueue.Pop();
         }
-
-        
     }
 }

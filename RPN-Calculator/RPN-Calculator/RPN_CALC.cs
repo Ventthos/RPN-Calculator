@@ -183,10 +183,8 @@ namespace RPN_Calculator
             {
                 for (int i = arrayStack.Size - 3; i < arrayStack.Size; i++)
                 {
-                    if (i < arrayStack.Size)
-                    {
-                        WriteLine(elementos[i]);
-                    }
+                    WriteLine(elementos[i]);
+                    
                     WriteLine();
                     WriteLine("-----------------------------------------------------");
                     WriteLine();
