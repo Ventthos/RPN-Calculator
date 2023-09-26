@@ -11,42 +11,42 @@ namespace RPN_Calculator
     {
         static void Main(string[] args)
         {
-            /* 
-             while (true)
-             {
-                 RPN rpnCalc = new RPN();
 
-                 Console.WriteLine("Escriba la expresión");
-                 string expresion = Console.ReadLine();
+            RPN rpnFunc = new RPN();
 
-                 List<string> expresList = rpnCalc.ConvertToRPN(expresion);
-                 string final = String.Join(" ", expresList);
-                 Console.WriteLine(final);
-                 Console.WriteLine($"Resultado: {rpnCalc.EvaluateRPN(expresList)}");
-             }
+            WriteLine("¿A qué metodo desea acceder?\n  1. Checar parentesis\n  2. Convertir a RPN y resolver \n  3. Calculadora RPN");
+            int opcion = int.Parse(ReadLine());
+            if( opcion == 1)
+            {
+                while (true)
+                {
+                    WriteLine("Escriba la expresión");
+                    string expresion = ReadLine();
+                    bool bien = rpnFunc.CheckParentheses(expresion);
+                    WriteLine(bien);
+                }
+                
+            }
+            else if(opcion == 2)
+            {
+                while (true)
+                {
+                    WriteLine("Escriba la expresión");
+                    string expresion = ReadLine();
 
-
-
-
-
-
-
-
-              RPN rpnCalc = new RPN();
-              while (true)
-              {
-                  Console.WriteLine("Escriba la expresión");
-                  string expresion = Console.ReadLine();
-                  bool bien = rpnCalc.CheckParentheses(expresion);
-                  Console.WriteLine(bien);
-              }
-            */
-
-            WriteLine("Calculadora RPN");
-              Stack<double> Stack = new Stack<double>();
-              RPN rpn = new RPN();
-              RPN_CALC rpnCalc = new RPN_CALC();
-              rpnCalc.Calculator();
+                    List<string> expresList = rpnFunc.ConvertToRPN(expresion);
+                    string final = String.Join(" ", expresList);
+                    WriteLine(final);
+                    WriteLine($"Resultado: {rpnFunc.EvaluateRPN(expresList)}");
+                }
+            }
+            else if( opcion == 3)
+            {
+                WriteLine("Calculadora RPN");
+                RPN_CALC rpnCalc = new RPN_CALC();
+                rpnCalc.Calculator();
+            }
+             
                
         }
     }
