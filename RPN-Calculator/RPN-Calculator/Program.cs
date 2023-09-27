@@ -22,8 +22,13 @@ namespace RPN_Calculator
                 {
                     WriteLine("Escriba la expresión");
                     string expresion = ReadLine();
+                    if(expresion == "")
+                    {
+                        WriteLine("Cerrando...");
+                        break;
+                    }
                     bool bien = rpnFunc.CheckParentheses(expresion);
-                    WriteLine(bien);
+                    WriteLine($"¿La expresión está correcta? {bien}");
                 }
                 
             }

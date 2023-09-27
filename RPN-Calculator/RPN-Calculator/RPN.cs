@@ -66,6 +66,13 @@ namespace RPN_Calculator
                 {
                     if(EsOperador(expression[i].ToString()) && (EsOperador(expression[i + 1].ToString()) || EsParentesisCierre(expression[i+1])))
                     {
+                        if(expression[i + 1] == '-')
+                        {
+                            if (i + 2 != expression.Length && Char.IsDigit(expression[i + 2]))
+                            {
+                                continue;
+                            }
+                        }
                         return false;
                     }
                 }
@@ -207,6 +214,10 @@ namespace RPN_Calculator
                             if (expresion[i] == '-' && !Char.IsDigit(backwardElement) && !EsParentesisCierre(backwardElement) && Char.IsDigit(checkFordward(expresion, i)))
                             {
                                 number += expresion[i];
+                            }
+                            else if (expresion[i] == '+' && !Char.IsDigit(backwardElement) && !EsParentesisCierre(backwardElement) && Char.IsDigit(checkFordward(expresion, i)))
+                            {
+                               
                             }
                             else
                             {
